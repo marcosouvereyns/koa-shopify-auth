@@ -8,7 +8,7 @@ import createTopLevelOAuthRedirect from './create-top-level-oauth-redirect';
 import createRequestStorageAccess from './create-request-storage-access';
 import setUserAgent from './set-user-agent';
 
-import Shopify from '@shopify/shopify-api';
+import Shopify, { AuthQuery } from '@shopify/shopify-api';
 
 const DEFAULT_MYSHOPIFY_DOMAIN = 'myshopify.com';
 export const DEFAULT_ACCESS_MODE: AccessMode = 'online';
@@ -79,7 +79,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
       const redirectUrl = await Shopify.Auth.beginAuth(
         ctx.req,
         ctx.res,
-        shop,
+        shop as string,
         oAuthCallbackPath,
         config.accessMode === 'online'
       );
@@ -94,7 +94,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 
     if (ctx.path === oAuthCallbackPath) {
       try {
-        const session = await Shopify.Auth.validateAuthCallback(ctx.req, ctx.res, ctx.query);
+        const session = await Shopify.Auth.validateAuthCallback(ctx.req, ctx.res, ctx.query as unknown as AuthQuery);
 
         ctx.state.shopify = session
 
