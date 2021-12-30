@@ -11,7 +11,8 @@
     "lint": "eslint",
     "prepublishOnly": "yarn run build",
     "preversion": "yarn test",
-    "postversion": "git push origin master --follow-tags && echo \"Log in to shipit to deploy version $npm_package_version\""
+    "postversion": "git push origin master --follow-tags && echo \"Log in to shipit to deploy version $npm_package_version\"",
+    "prepare": "npm run build"
   },
   "publishConfig": {
     "access": "public"

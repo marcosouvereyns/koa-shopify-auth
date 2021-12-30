@@ -27,7 +27,7 @@
       "es2018",
       "esnext.asynciterable"
     ],
-    "typeRoots": ["../node_modules/@types"],
+    "typeRoots": ["node_modules/@types"],
     "outDir": "./dist",
     "baseUrl": ".",
     "rootDir": "."

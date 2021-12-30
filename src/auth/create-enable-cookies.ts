@@ -41,10 +41,10 @@ export default function createEnableCookies({
 
   <script>
     window.apiKey = "${Shopify.Context.API_KEY}";
-    window.shopOrigin = "https://${encodeURIComponent(shop)}";
+    window.shopOrigin = "https://${encodeURIComponent(shop as string)}";
 
     ${itpHelper}
-    ${topLevelInteraction(shop, prefix)}
+    ${topLevelInteraction(shop as string, prefix)}
   </script>
 </head>
 <body>

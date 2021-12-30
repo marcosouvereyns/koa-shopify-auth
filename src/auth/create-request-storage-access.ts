@@ -40,10 +40,10 @@ export default function createRequestStorageAccess({
 
   <script>
     window.apiKey = "${Shopify.Context.API_KEY}";
-    window.shopOrigin = "https://${encodeURIComponent(shop)}";
+    window.shopOrigin = "https://${encodeURIComponent(shop as string)}";
     ${itpHelper}
     ${storageAccessHelper}
-    ${requestStorageAccess(shop, prefix)}
+    ${requestStorageAccess(shop as string, prefix)}
   </script>
 </head>
 <body>
