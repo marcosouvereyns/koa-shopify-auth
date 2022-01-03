@@ -1,18 +1,18 @@
-import {Context} from 'koa';
+import { Context } from 'koa';
 
 import createTopLevelRedirect from './create-top-level-redirect';
 import getCookieOptions from './cookie-options';
 
-import {TOP_LEVEL_OAUTH_COOKIE_NAME} from './index';
+import { TOP_LEVEL_OAUTH_COOKIE_NAME } from './index';
 
 export default function createTopLevelOAuthRedirect(
-  apiKey: string,
-  path: string,
+	apiKey: string,
+	path: string,
 ) {
-  const redirect = createTopLevelRedirect(apiKey, path);
+	const redirect = createTopLevelRedirect(apiKey, path);
 
-  return function topLevelOAuthRedirect(ctx: Context) {
-    ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME, '1', getCookieOptions(ctx));
-    redirect(ctx);
-  };
+	return function topLevelOAuthRedirect(ctx: Context) {
+		ctx.cookies.set(TOP_LEVEL_OAUTH_COOKIE_NAME, '1', getCookieOptions(ctx));
+		redirect(ctx);
+	};
 }
