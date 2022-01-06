@@ -57,19 +57,15 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 	return async function shopifyAuth(ctx: Context, next: NextFunction) {
 		ctx.cookies.secure = true;
 
-		if (
-			ctx.path === oAuthStartPath &&
-			!hasCookieAccess(ctx) &&
-			!grantedStorageAccess(ctx)
-		) {
+		if (ctx.path === oAuthStartPath && !hasCookieAccess(ctx) && !grantedStorageAccess(ctx)) {
+			console.log("[shopifyAuth] - requestStorageAccess()", ctx.query.shop)
 			await requestStorageAccess(ctx);
 			return;
 		}
 
-		if (
-			ctx.path === inlineOAuthPath ||
-			(ctx.path === oAuthStartPath && shouldPerformInlineOAuth(ctx))
-		) {
+		if (ctx.path === inlineOAuthPath || (ctx.path === oAuthStartPath && shouldPerformInlineOAuth(ctx))) {
+			console.log("[shopifyAuth] - inlineOAuth", ctx.path, ctx.query.shop)
+
 			const shop = ctx.query.shop;
 			if (shop == null) {
 				ctx.throw(400);
@@ -88,11 +84,14 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 		}
 
 		if (ctx.path === oAuthStartPath) {
+			console.log("[shopifyAuth] - topLevelOAuthRedirect()", ctx.query.shop)
 			await topLevelOAuthRedirect(ctx);
 			return;
 		}
 
 		if (ctx.path === oAuthCallbackPath) {
+			console.log("[shopifyAuth] - authCallback", ctx.query.shop)
+
 			try {
 				const session = await Shopify.Auth.validateAuthCallback(ctx.req, ctx.res, ctx.query as unknown as AuthQuery);
 
@@ -103,6 +102,8 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 				}
 			}
 			catch (e) {
+				console.error("[shopifyAuth] - authCallback catched error", ctx.query.shop, e)
+
 				switch (true) {
 					case (e instanceof Shopify.Errors.InvalidOAuthError):
 						ctx.throw(400, e.message);
@@ -121,6 +122,7 @@ export default function createShopifyAuth(options: OAuthStartOptions) {
 		}
 
 		if (ctx.path === enableCookiesPath) {
+			console.log("[shopifyAuth] - enableCookies()", ctx.query.shop)
 			await enableCookies(ctx);
 			return;
 		}
